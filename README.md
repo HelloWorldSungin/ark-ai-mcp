@@ -60,6 +60,54 @@ In any Claude Code session, invoke skills by name:
 
 Each skill provides the mcporter call syntax and common examples. Use `--output json` for machine-readable results.
 
+## Adding a New MCP Server
+
+To make a new MCP server available to mcporter (and then wrap it as a skill):
+
+### 1. Register the server in `~/.mcporter/mcporter.json`
+
+Add an entry under `mcpServers`:
+
+```json
+{
+  "mcpServers": {
+    "my-server": {
+      "description": "What this server does.",
+      "baseUrl": "https://mcp.example.com/mcp"
+    }
+  }
+}
+```
+
+**Common auth patterns:**
+
+```json
+// No auth (Context7, DeepWiki)
+{ "baseUrl": "https://mcp.example.com/mcp" }
+
+// Bearer token from env var (GitHub)
+{ "baseUrl": "https://api.example.com/mcp/", "bearerTokenEnv": "MY_TOKEN" }
+
+// OAuth flow (Linear)
+{ "baseUrl": "https://mcp.example.com/mcp", "auth": "oauth" }
+```
+
+For OAuth servers, run `mcporter auth <server-name>` after adding the entry.
+
+### 2. Verify the server works
+
+```bash
+# List available tools
+mcporter list my-server --all-parameters
+
+# Test a call
+mcporter call my-server.some_tool --output json
+```
+
+### 3. Create the skill
+
+Create `skills/mcp-<server>/SKILL.md` following the existing pattern (see CLAUDE.md for structure). Commit, bump the version in `.claude-plugin/plugin.json`, and update the plugin.
+
 ## License
 
 MIT
