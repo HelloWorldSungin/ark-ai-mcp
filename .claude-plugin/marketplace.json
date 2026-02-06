@@ -1,0 +1,20 @@
+{
+  "name": "ark-ai-mcp",
+  "owner": {
+    "name": "SunginKim",
+    "email": "sungin@arknode.com"
+  },
+  "metadata": {
+    "description": "MCP wrapper skills for Linear, GitHub, Context7, DeepWiki via mcporter CLI",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "ark-ai-mcp",
+      "source": "./",
+      "description": "On-demand MCP skills that call mcporter via Bash — saves ~40 tool definitions from context window",
+      "version": "1.0.0",
+      "strict": true
+    }
+  ]
+}
