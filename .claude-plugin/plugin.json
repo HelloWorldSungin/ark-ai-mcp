@@ -1,10 +1,10 @@
 {
   "name": "ark-ai-mcp",
-  "description": "MCP wrapper skills for calling Linear, GitHub, Context7, and DeepWiki via mcporter CLI — zero context window overhead",
-  "version": "1.0.0",
+  "description": "MCP wrapper skills for calling Linear, GitHub, Context7, DeepWiki, and Playwright via mcporter CLI — zero context window overhead",
+  "version": "1.1.0",
   "author": { "name": "SunginKim", "email": "sungin@arknode.com" },
   "homepage": "https://github.com/HelloWorldSungin/ark-ai-mcp",
   "repository": "git@github.com:HelloWorldSungin/ark-ai-mcp.git",
   "license": "MIT",
-  "keywords": ["mcp", "mcporter", "linear", "github", "context7", "deepwiki", "skills"]
+  "keywords": ["mcp", "mcporter", "linear", "github", "context7", "deepwiki", "playwright", "browser", "skills"]
 }

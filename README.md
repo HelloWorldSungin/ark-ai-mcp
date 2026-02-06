@@ -10,6 +10,7 @@ Claude Code plugin providing MCP wrapper skills via [mcporter](https://github.co
 | `/mcp-github` | GitHub code search, file contents, repo queries (complements `gh` CLI) |
 | `/mcp-context7` | Library/framework documentation lookup via Context7 |
 | `/mcp-deepwiki` | Public GitHub repo documentation and architecture queries |
+| `/mcp-playwright` | Browser automation — navigate, interact, screenshot, scrape web pages |
 
 ## Prerequisites
 
@@ -18,13 +19,14 @@ Claude Code plugin providing MCP wrapper skills via [mcporter](https://github.co
    brew install steipete/tap/mcporter
    ```
 
-2. **~/.mcporter/mcporter.json** configured with MCP server definitions for `linear`, `github`, `context7`, `deepwiki`
+2. **~/.mcporter/mcporter.json** configured with MCP server definitions for `linear`, `github`, `context7`, `deepwiki`, `playwright`
 
 3. **Auth setup** per server:
    - **Linear**: OAuth via `mcporter auth linear`
    - **GitHub**: `GITHUB_TOKEN` env var
    - **Context7**: No auth required
    - **DeepWiki**: No auth required
+   - **Playwright**: No auth required (runs locally via npx)
 
 ## Installation
 
@@ -56,6 +58,7 @@ In any Claude Code session, invoke skills by name:
 /mcp-github          # Then search code, get file contents
 /mcp-context7        # Then look up library docs
 /mcp-deepwiki        # Then query public repo documentation
+/mcp-playwright      # Then navigate pages, fill forms, take screenshots
 ```
 
 Each skill provides the mcporter call syntax and common examples. Use `--output json` for machine-readable results.

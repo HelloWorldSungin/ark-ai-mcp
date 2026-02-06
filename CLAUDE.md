@@ -2,7 +2,7 @@
 
 ## Overview
 
-ark-ai-mcp is a Claude Code plugin providing MCP wrapper skills that call external services (Linear, GitHub, Context7, DeepWiki) via the mcporter CLI. Each skill replaces ~10-30 MCP tool definitions with a single on-demand skill invocation, saving context window.
+ark-ai-mcp is a Claude Code plugin providing MCP wrapper skills that call external services (Linear, GitHub, Context7, DeepWiki, Playwright) via the mcporter CLI. Each skill replaces ~10-30 MCP tool definitions with a single on-demand skill invocation, saving context window.
 
 ## Skill Structure
 
