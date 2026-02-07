@@ -1,11 +1,13 @@
 ---
 name: mcp-playwright
-description: Browser automation via Playwright MCP — navigate, interact, screenshot, and inspect web pages headlessly. Use when you need to browse the web, fill forms, take screenshots, or scrape page content.
+description: Browser automation via Playwright MCP — navigate, interact, screenshot, and inspect web pages headlessly. Use when you need to browse the web, fill forms, take screenshots, or scrape page content without an existing browser session.
 allowed-tools: [Bash]
 ---
 
 <objective>
 Automate browser interactions through the Playwright MCP server via mcporter CLI. Navigate to URLs, click elements, fill forms, take screenshots, and read page content — all headless by default. Use this when you need to interact with web pages, verify UI, scrape content, or test web flows.
+
+**Playwright MCP vs Claude-in-Chrome**: Use Playwright MCP for headless/CI/server automation where no browser window exists. Use Claude-in-Chrome MCP tools for interactive browser sessions where the user has Chrome open with the extension.
 </objective>
 
 <process>
@@ -58,14 +60,10 @@ mcporter call 'playwright.TOOL_NAME(key: "value")' --output json
 | `browser_evaluate` | `expression` | Run a JavaScript expression in the page |
 | `browser_run_code` | `code` | Run a Playwright code snippet |
 
-### Tabs
+### Tabs, Waiting & Dialogs
 | Tool | Parameters | Description |
 |------|-----------|-------------|
 | `browser_tabs` | — | List open tabs |
-
-### Waiting & Dialogs
-| Tool | Parameters | Description |
-|------|-----------|-------------|
 | `browser_wait_for` | `text` or `timeout` | Wait for text to appear or a timeout |
 | `browser_handle_dialog` | `accept` | Accept or dismiss a dialog |
 | `browser_file_upload` | `paths` | Upload files to a file input |
@@ -77,26 +75,43 @@ mcporter call 'playwright.TOOL_NAME(key: "value")' --output json
 
 ## Common Workflows
 
+### Scrape Page Content
+
 ```bash
-# Navigate to a page and get its content
+# Navigate and get accessibility tree
 mcporter call 'playwright.browser_navigate(url: "https://example.com")' --output json
 mcporter call playwright.browser_snapshot --output json
 
-# Take a screenshot
-mcporter call 'playwright.browser_navigate(url: "https://example.com")' --output json
-mcporter call playwright.browser_take_screenshot --output json
+# Extract specific data via JavaScript
+mcporter call 'playwright.browser_evaluate(expression: "document.querySelector(\"h1\").textContent")' --output json
+```
 
-# Fill a form (use refs from snapshot)
+### Fill and Submit a Form
+
+```bash
+# Navigate and inspect
 mcporter call 'playwright.browser_navigate(url: "https://example.com/login")' --output json
 mcporter call playwright.browser_snapshot --output json
-mcporter call 'playwright.browser_click(element: "Username field", ref: "e3")' --output json
+
+# Use refs from snapshot to interact
 mcporter call 'playwright.browser_type(element: "Username field", ref: "e3", text: "user@example.com")' --output json
+mcporter call 'playwright.browser_type(element: "Password field", ref: "e5", text: "password")' --output json
+mcporter call 'playwright.browser_click(element: "Submit button", ref: "e7")' --output json
+```
 
-# Run JavaScript on the page
-mcporter call 'playwright.browser_evaluate(expression: "document.title")' --output json
+### Take a Screenshot
 
-# Check console messages for errors
+```bash
+mcporter call 'playwright.browser_navigate(url: "https://example.com")' --output json
+mcporter call playwright.browser_take_screenshot --output json
+```
+
+### Debug a Page
+
+```bash
+mcporter call 'playwright.browser_navigate(url: "https://example.com")' --output json
 mcporter call playwright.browser_console_messages --output json
+mcporter call playwright.browser_network_requests --output json
 ```
 
 ## Discovering All Available Tools
@@ -112,8 +127,9 @@ mcporter list playwright --all-parameters
 - **First call is slower**: npx downloads `@playwright/mcp` on the first invocation. Subsequent calls reuse the cached package.
 - **Use `browser_snapshot` as your primary observation tool** — it returns an accessibility tree with element refs that you use for `browser_click`, `browser_type`, etc.
 - **Element refs**: After a `browser_snapshot`, use the `ref` values (e.g., `"e3"`) to target elements in interaction tools.
-- **No authentication required** — this server runs locally via npx.
+- **Empty accessibility tree?** Use `browser_wait_for` with a timeout or text selector to wait for dynamic content to load, then retry `browser_snapshot`.
+- No authentication required — this server runs locally via npx.
 - **Install browser if needed**: If Playwright browsers aren't installed, call `browser_install` first.
-- **Extended capabilities**: Pass `--caps` flags when configuring the server for vision mode, PDF generation, or testing features.
+- Extended capabilities: Pass `--caps` flags when configuring the server for vision mode, PDF generation, or testing features.
 - Use `--output json` for machine-readable results.
 </tips>

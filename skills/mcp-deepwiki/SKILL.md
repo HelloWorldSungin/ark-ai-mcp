@@ -1,67 +1,85 @@
 ---
 name: mcp-deepwiki
-description: Query public GitHub repos and their documentation via DeepWiki MCP. Use when you need to understand a public repo's architecture, APIs, or docs without cloning it.
+description: Query public GitHub repos via DeepWiki MCP — AI-powered answers about architecture, internals, and design decisions without cloning. Use for "how does X work?" questions about any public repo.
 allowed-tools: [Bash]
 ---
 
 <objective>
-Query public GitHub repositories and their documentation through the DeepWiki MCP server. Get AI-powered answers about repo architecture, APIs, usage patterns, and more — without needing to clone the repo locally. No authentication required.
+Query public GitHub repositories through the DeepWiki MCP server. Get AI-powered answers about repo architecture, internals, design decisions, and usage patterns — without cloning the repo locally. No authentication required.
+
+**DeepWiki vs Context7 vs GitHub MCP**:
+- **DeepWiki**: Architecture, internals, design decisions — "How does X work under the hood?"
+- **Context7**: API docs, code examples, usage patterns — "How do I use X?"
+- **GitHub MCP**: Source code, PRs, issues, commits — "What does the code say?"
 </objective>
 
 <process>
 
-## Available Tools
+## Investigation Workflow
 
-### Ask a Question About a Repo
+For understanding an unfamiliar repo, follow this order:
 
-Best for targeted questions. Returns AI-powered, context-grounded answers:
+### 1. Browse Structure First
 
-```bash
-mcporter call 'deepwiki.ask_question(repoName: "facebook/react", question: "How does the fiber reconciler work?")' --output json
-```
-
-Can query multiple repos (max 10):
-
-```bash
-mcporter call 'deepwiki.ask_question(repoName: ["vercel/next.js", "remix-run/remix"], question: "How do these frameworks handle server-side rendering differently?")' --output json
-```
-
-### Browse Wiki Structure
-
-See the documentation topics available for a repo:
+See what documentation topics are available:
 
 ```bash
 mcporter call 'deepwiki.read_wiki_structure(repoName: "facebook/react")' --output json
 ```
 
-### Read Wiki Contents
+Returns a table of contents for the repo's wiki. Use this to understand what's documented before asking questions.
 
-Get the full documentation for a repo:
+### 2. Ask Targeted Questions
+
+Best for specific questions. Returns AI-powered, context-grounded answers:
+
+```bash
+mcporter call 'deepwiki.ask_question(repoName: "facebook/react", question: "How does the fiber reconciler work?")' --output json
+```
+
+### 3. Read Full Wiki (Use Sparingly)
+
+Gets the complete documentation for a repo. **Warning**: Can return 10K+ tokens. Only use when you need a comprehensive dump:
 
 ```bash
 mcporter call 'deepwiki.read_wiki_contents(repoName: "facebook/react")' --output json
 ```
 
-## Common Examples
+**Prefer `ask_question` for targeted queries** — it's faster and returns only relevant content.
+
+## Multi-Repo Comparison
+
+Compare approaches across repos (max 10):
+
+```bash
+mcporter call 'deepwiki.ask_question(repoName: ["vercel/next.js", "remix-run/remix"], question: "How do these frameworks handle server-side rendering differently?")' --output json
+```
+
+## Common Patterns
 
 ```bash
 # Understand a library's architecture
 mcporter call 'deepwiki.ask_question(repoName: "steipete/mcporter", question: "How does the config discovery and merging work?")' --output json
 
-# Compare approaches across repos
+# Investigate design decisions
+mcporter call 'deepwiki.ask_question(repoName: "anthropics/claude-code", question: "How does the permission system work?")' --output json
+
+# Compare competing libraries
 mcporter call 'deepwiki.ask_question(repoName: ["expressjs/express", "fastify/fastify"], question: "How do these handle middleware differently?")' --output json
 
-# Explore what docs are available
-mcporter call 'deepwiki.read_wiki_structure(repoName: "anthropics/claude-code")' --output json
+# Explore what docs exist before deep diving
+mcporter call 'deepwiki.read_wiki_structure(repoName: "langchain-ai/langchain")' --output json
 ```
 
 </process>
 
 <tips>
-- No authentication required — works out of the box.
-- Use `ask_question` for specific questions; use `read_wiki_structure` to browse available topics first.
+- **Start with `read_wiki_structure`** to see what's available, then use `ask_question` for specifics.
+- **`ask_question` is your primary tool** — it returns focused, relevant answers without the token cost of a full wiki dump.
+- **`read_wiki_contents` is expensive** — it returns the entire wiki (often 10K+ tokens). Only use it when you need comprehensive coverage.
 - The `repoName` format is always `owner/repo` (e.g., "facebook/react").
-- For multiple repos, pass an array (max 10).
+- For multiple repos, pass an array (max 10): `repoName: ["repo1", "repo2"]`
+- No authentication required — works out of the box.
+- Best for **public repos only** — private repos won't be accessible.
 - Use `--output json` for machine-readable results.
-- Best for public repos only — private repos won't be accessible.
 </tips>

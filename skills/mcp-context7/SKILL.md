@@ -1,11 +1,13 @@
 ---
 name: mcp-context7
-description: Look up library and framework documentation via Context7 MCP. Use when you need up-to-date docs, API references, or code examples for any programming library.
+description: Look up library and framework documentation via Context7 MCP. Use when you need up-to-date API references, code examples, or usage patterns for any programming library.
 allowed-tools: [Bash]
 ---
 
 <objective>
-Query up-to-date documentation and code examples for any programming library or framework via the Context7 MCP server. No authentication required. Two-step process: resolve the library ID, then query docs.
+Query up-to-date documentation and code examples for any programming library or framework via the Context7 MCP server. Best for API references, code examples, and usage patterns. No authentication required. Two-step process: resolve the library ID, then query docs.
+
+**Context7 vs DeepWiki**: Use Context7 for API docs, code examples, and "how do I use X?" questions. Use DeepWiki for architecture, internals, and "how does X work under the hood?" questions.
 </objective>
 
 <process>
@@ -18,38 +20,60 @@ Find the Context7 library ID for the library you need:
 mcporter call 'context7.resolve-library-id(query: "how to use React hooks", libraryName: "react")' --output json
 ```
 
-This returns matching libraries ranked by relevance. Pick the `libraryId` from the best match (format: `/org/project`).
+Returns matching libraries ranked by relevance. Pick the `libraryId` from the best match (format: `/org/project`).
+
+**Skip this step** if you already know the library ID from the list below.
+
+## Common Library IDs
+
+| Library | ID | Library | ID |
+|---------|----|---------|----|
+| React | `/facebook/react` | Next.js | `/vercel/next.js` |
+| TypeScript | `/microsoft/TypeScript` | Tailwind CSS | `/tailwindlabs/tailwindcss` |
+| Node.js | `/nodejs/node` | Express | `/expressjs/express` |
+| Vue | `/vuejs/vue` | Svelte | `/sveltejs/svelte` |
+| Angular | `/angular/angular` | Remix | `/remix-run/remix` |
+| Python (pandas) | `/pandas-dev/pandas` | scikit-learn | `/scikit-learn/scikit-learn` |
+| Flask | `/pallets/flask` | Django | `/django/django` |
+| FastAPI | `/tiangolo/fastapi` | SQLAlchemy | `/sqlalchemy/sqlalchemy` |
+| LangChain | `/langchain-ai/langchain` | Anthropic SDK | `/anthropics/anthropic-sdk-python` |
+| Rust | `/rust-lang/rust` | Go | `/golang/go` |
+| PostgreSQL | `/postgres/postgres` | Redis | `/redis/redis` |
+| Docker | `/docker/docs` | Kubernetes | `/kubernetes/kubernetes` |
 
 ## Step 2: Query Documentation
-
-Use the resolved library ID to fetch docs:
 
 ```bash
 mcporter call 'context7.query-docs(libraryId: "/vercel/next.js", query: "how to set up middleware for authentication")' --output json
 ```
 
-## Common Examples
+Response includes: `libraryId`, `title`, `description`, `codeSnippetCount`, and the documentation content.
+
+## Examples
 
 ```bash
-# React hooks docs
-mcporter call 'context7.resolve-library-id(query: "React hooks", libraryName: "react")' --output json
+# React hooks (known ID — skip resolve step)
 mcporter call 'context7.query-docs(libraryId: "/facebook/react", query: "useEffect cleanup patterns")' --output json
 
-# Next.js routing
-mcporter call 'context7.resolve-library-id(query: "Next.js app router", libraryName: "next.js")' --output json
-mcporter call 'context7.query-docs(libraryId: "/vercel/next.js", query: "app router dynamic routes")' --output json
+# Next.js routing (known ID)
+mcporter call 'context7.query-docs(libraryId: "/vercel/next.js", query: "app router dynamic routes with params")' --output json
 
-# Python library
-mcporter call 'context7.resolve-library-id(query: "pandas dataframe", libraryName: "pandas")' --output json
+# Python library (known ID)
 mcporter call 'context7.query-docs(libraryId: "/pandas-dev/pandas", query: "merge dataframes on multiple columns")' --output json
+
+# Unknown library — resolve first
+mcporter call 'context7.resolve-library-id(query: "Prisma ORM", libraryName: "prisma")' --output json
+mcporter call 'context7.query-docs(libraryId: "/prisma/prisma", query: "define relations between models")' --output json
 ```
 
 </process>
 
 <tips>
-- Always call `resolve-library-id` first unless you already know the exact library ID (format: `/org/project`).
+- **Skip resolve** for libraries in the common IDs table above — go directly to `query-docs`.
 - Do not call either tool more than 3 times per question. Use the best result you have.
 - No authentication required — this server works out of the box.
-- The `query` parameter in both tools should describe what you're trying to accomplish, not just a keyword.
+- **Write queries as questions**, not keywords. "How do I handle form validation in React?" works better than "React form validation".
+- Include use case context in your query for better results: "useEffect with async fetch and cleanup" > "useEffect".
+- If resolve returns no results, try a different `libraryName` or a more descriptive `query`.
 - Use `--output json` to parse results programmatically.
 </tips>

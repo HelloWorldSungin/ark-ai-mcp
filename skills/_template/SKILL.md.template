@@ -1,0 +1,79 @@
+---
+name: mcp-SERVERNAME
+description: One-line description of what this skill does, when to use it, and any auth requirements.
+allowed-tools: [Bash]
+---
+
+<objective>
+What this skill does in 1-2 sentences. Include the server name and what domain it covers.
+
+**When to use this vs alternatives**: Briefly explain when to use this skill vs other tools (gh CLI, Claude-in-Chrome, other MCP skills, etc). This helps Claude pick the right tool.
+</objective>
+
+<process>
+
+## Call Syntax
+
+```bash
+# Colon-delimited (shell-friendly, best for simple args)
+mcporter call SERVERNAME.TOOL_NAME key:value --output json
+
+# Function-call style (better for complex/quoted args)
+mcporter call 'SERVERNAME.TOOL_NAME(key: "value", key2: "value2")' --output json
+```
+
+Always use `--output json` for machine-readable results.
+
+## Tool Catalog
+
+<!-- Organize tools into logical categories. Use compact tables.
+     Run `mcporter list SERVERNAME --all-parameters` to discover all tools. -->
+
+### Category Name (N tools)
+
+| Tool | Key Parameters | Description |
+|------|---------------|-------------|
+| `tool_name` | `param1`, `param2` | What it does |
+
+### Another Category (N tools)
+
+| Tool | Key Parameters | Description |
+|------|---------------|-------------|
+| `another_tool` | `param1` | What it does |
+
+## Workflows
+
+<!-- Include 2-4 concrete multi-step workflows showing how to chain tools
+     for real tasks. These are the most valuable part of the skill. -->
+
+### 1. Workflow Name
+
+```bash
+# Step 1: What this does
+mcporter call 'SERVERNAME.tool1(param: "value")' --output json
+
+# Step 2: What this does
+mcporter call 'SERVERNAME.tool2(param: "value")' --output json
+```
+
+### 2. Another Workflow
+
+```bash
+mcporter call 'SERVERNAME.tool3(param: "value")' --output json
+```
+
+</process>
+
+<tips>
+<!-- Include 5-10 practical tips. Focus on:
+     - Critical parameters that change tool behavior (like method enums)
+     - Pagination patterns
+     - Auth requirements
+     - Common gotchas
+     - Performance notes (cold start, token cost, rate limits) -->
+- **Tip about critical parameter**: Explanation.
+- **Pagination**: How pagination works for list/search tools.
+- **Auth**: What auth is needed and how to check it's configured.
+- Discover tools: `mcporter list SERVERNAME --all-parameters`
+- Use `--output json` for machine-readable results.
+</tips>

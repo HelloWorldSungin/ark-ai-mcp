@@ -2,7 +2,7 @@
 
 ## Overview
 
-ark-ai-mcp is a Claude Code plugin providing MCP wrapper skills that call external services (Linear, GitHub, Context7, DeepWiki, Playwright) via the mcporter CLI. Each skill replaces ~10-30 MCP tool definitions with a single on-demand skill invocation, saving context window.
+ark-ai-mcp is a Claude Code plugin providing MCP wrapper skills that call external services (GitHub, Linear, Context7, DeepWiki, Playwright) via the mcporter CLI. Each skill replaces ~10-30 MCP tool definitions with a single on-demand skill invocation, saving context window.
 
 ## Skill Structure
 
@@ -14,10 +14,13 @@ Each skill lives in `skills/<name>/SKILL.md` with:
 
 ## Adding a New MCP Skill
 
-1. Create `skills/mcp-<server>/SKILL.md`
+1. Copy the template: `cp skills/_template/SKILL.md.template skills/mcp-<server>/SKILL.md`
 2. Run `mcporter list <server> --all-parameters` to discover available tools
-3. Follow the existing skill structure (objective, process, tips)
-4. Test: invoke `/mcp-<server>` in a Claude Code session
+3. Write the skill with all four parts: **decision framework** (when to use this vs alternatives), **tool catalog** (compact tables with all tools), **workflows** (2-4 multi-step bash examples), **tips** (critical params, pagination, auth)
+4. Test: `mcporter call <server>.some_tool --output json`, then invoke `/mcp-<server>` in a Claude Code session
+5. Bump version in `.claude-plugin/plugin.json` and `marketplace.json`, sync to `~/.claude/plugins/marketplaces/ark-ai-mcp/`
+
+See README.md for the full guide and quality checklist.
 
 ## Installation
 
