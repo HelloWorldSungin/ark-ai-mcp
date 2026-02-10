@@ -1,6 +1,6 @@
 ---
 name: mcp-linear
-description: Call Linear MCP tools via mcporter CLI. Use when you need to interact with Linear issues, projects, teams, comments, documents, cycles, milestones, attachments, or labels. Replaces the Linear MCP plugin to save context window.
+description: "Call Linear MCP tools via mcporter CLI \u2014 issues, projects, teams, comments, cycles, milestones, and more. Use for: 'create Linear issue', 'list my issues', 'update issue status', 'check sprint progress', 'add comment to ticket'. Replaces native Linear MCP plugin to save context window."
 allowed-tools: [Bash]
 ---
 
@@ -94,15 +94,6 @@ mcporter call 'linear.update_project(id: "PROJECT_UUID", state: "started", descr
 mcporter call linear.list_project_labels --output json
 ```
 
-## Milestones
-
-```bash
-mcporter call linear.list_milestones project:infra --output json
-mcporter call linear.get_milestone id:MILESTONE_UUID --output json
-mcporter call 'linear.create_milestone(name: "Beta Launch", project: "infra", targetDate: "2026-03-15")' --output json
-mcporter call 'linear.update_milestone(id: "MILESTONE_UUID", name: "Beta Launch v2")' --output json
-```
-
 ## Users
 
 ```bash
@@ -110,53 +101,16 @@ mcporter call linear.list_users --output json
 mcporter call linear.get_user query:me --output json
 ```
 
-## Documents
+## Extended Operations
 
-```bash
-mcporter call linear.list_documents --output json
-mcporter call linear.get_document id:DOC_ID --output json
-mcporter call 'linear.create_document(title: "My Doc", project: "infra", content: "# Heading\nBody")' --output json
-mcporter call 'linear.update_document(id: "DOC_ID", content: "# Updated\nNew content")' --output json
-```
-
-## Attachments
-
-```bash
-mcporter call linear.get_attachment id:ATTACHMENT_UUID --output json
-mcporter call 'linear.create_attachment(issueId: "ISSUE_UUID", url: "https://example.com/file.pdf", title: "Design spec")' --output json
-mcporter call linear.delete_attachment id:ATTACHMENT_UUID --output json
-```
-
-## Cycles, Labels, Statuses
-
-```bash
-# Cycles
-mcporter call linear.list_cycles teamId:TEAM_UUID type:current --output json
-
-# Issue labels
-mcporter call linear.list_issue_labels team:ENG --output json
-mcporter call 'linear.create_issue_label(name: "Technical Debt", team: "ENG", color: "#ff6600")' --output json
-
-# Issue statuses
-mcporter call linear.list_issue_statuses team:ENG --output json
-```
-
-## Other Tools
-
-```bash
-# Search Linear docs
-mcporter call linear.search_documentation query:"keyboard shortcuts" --output json
-
-# Extract images from markdown
-mcporter call 'linear.extract_images(markdown: "![img](https://...)")' --output json
-```
+Milestones, Documents, Attachments, Cycles, Labels, Statuses, and other tools are documented in `references/tool-catalog.md`. Or run `mcporter list linear --all-parameters` to see all tools.
 
 </process>
 
 <tips>
 - Use `--output json` for all calls when you need to parse the result.
 - Issue identifiers (like ENG-123) work for `get_issue` but UUIDs are needed for `update_issue`, `list_comments`, etc. Get the UUID from `get_issue` first.
-- To discover all available tools or check parameter details: `mcporter list linear --all-parameters`
+- Discover all tools and parameters: `mcporter list linear --all-parameters`
 - **Priority values**: 0=None, 1=Urgent, 2=High, 3=Normal, 4=Low
 - **State** accepts type names (backlog, unstarted, started, completed, cancelled) or specific state names.
 - The `assignee` field accepts "me", a user name, email, or UUID.

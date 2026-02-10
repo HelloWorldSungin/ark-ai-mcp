@@ -1,6 +1,6 @@
 ---
 name: mcp-context7
-description: Look up library and framework documentation via Context7 MCP. Use when you need up-to-date API references, code examples, or usage patterns for any programming library.
+description: "Look up library and framework documentation via Context7 MCP. Use for: 'how do I use React hooks', 'FastAPI middleware docs', 'pandas merge examples', 'Next.js app router API reference'. No auth required."
 allowed-tools: [Bash]
 ---
 

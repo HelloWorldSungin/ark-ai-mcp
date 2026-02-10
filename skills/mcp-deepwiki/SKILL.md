@@ -1,6 +1,6 @@
 ---
 name: mcp-deepwiki
-description: Query public GitHub repos via DeepWiki MCP — AI-powered answers about architecture, internals, and design decisions without cloning. Use for "how does X work?" questions about any public repo.
+description: "Query public GitHub repos via DeepWiki MCP \u2014 AI-powered answers about architecture, internals, and design decisions without cloning. Use for: 'how does this repo work', 'explain the architecture of X', 'compare two frameworks'. No auth required."
 allowed-tools: [Bash]
 ---
 

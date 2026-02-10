@@ -1,8 +1,20 @@
 ---
 name: mcp-SERVERNAME
-description: One-line description of what this skill does, when to use it, and any auth requirements.
+description: "One-line of what this does. Use for: 'trigger phrase 1', 'trigger phrase 2', 'trigger phrase 3'. Auth note if needed."
 allowed-tools: [Bash]
 ---
+
+<!-- DESCRIPTION GUIDELINES:
+     - Start with what the skill does (verb phrase)
+     - Include 2-4 trigger phrases after "Use for:" — these are natural-language
+       phrases a user might say that should activate this skill
+     - Add auth requirements at the end if applicable
+     - Keep under 200 chars for the frontmatter description
+
+     Examples:
+       "Call GitHub MCP tools via mcporter CLI — PRs, issues, repos. Use for: 'search code across repos', 'read files from another branch'. Requires GITHUB_TOKEN."
+       "Look up library docs via Context7 MCP. Use for: 'how do I use React hooks', 'FastAPI middleware docs', 'pandas merge examples'."
+-->
 
 <objective>
 What this skill does in 1-2 sentences. Include the server name and what domain it covers.
@@ -26,8 +38,19 @@ Always use `--output json` for machine-readable results.
 
 ## Tool Catalog
 
-<!-- Organize tools into logical categories. Use compact tables.
-     Run `mcporter list SERVERNAME --all-parameters` to discover all tools. -->
+<!-- PROGRESSIVE DISCLOSURE:
+     For servers with many tools (>15-20), use a summary table here and
+     extract the full catalog to references/tool-catalog.md:
+
+     | Category | Count | Key Tools |
+     |----------|-------|-----------|
+     | Category A | 8 | `tool1`, `tool2`, `tool3` |
+     | Category B | 5 | `tool4`, `tool5` |
+
+     **Full parameter details**: Read `references/tool-catalog.md`
+
+     For servers with fewer tools (<15), inline the full catalog:
+-->
 
 ### Category Name (N tools)
 
@@ -44,7 +67,8 @@ Always use `--output json` for machine-readable results.
 ## Workflows
 
 <!-- Include 2-4 concrete multi-step workflows showing how to chain tools
-     for real tasks. These are the most valuable part of the skill. -->
+     for real tasks. These are the most valuable part of the skill.
+     Always keep workflows inline — never extract them to references. -->
 
 ### 1. Workflow Name
 
@@ -71,9 +95,25 @@ mcporter call 'SERVERNAME.tool3(param: "value")' --output json
      - Auth requirements
      - Common gotchas
      - Performance notes (cold start, token cost, rate limits) -->
+- Discover all tools and parameters: `mcporter list SERVERNAME --all-parameters`
 - **Tip about critical parameter**: Explanation.
 - **Pagination**: How pagination works for list/search tools.
 - **Auth**: What auth is needed and how to check it's configured.
-- Discover tools: `mcporter list SERVERNAME --all-parameters`
 - Use `--output json` for machine-readable results.
 </tips>
+
+<!-- SIZE TARGETS:
+     - Small server (2-5 tools): ~60-80 lines, inline everything
+     - Medium server (6-15 tools): ~100-130 lines, inline catalog
+     - Large server (16+ tools): ~120-140 lines, extract catalog to references/
+
+     The references/ directory pattern:
+       skills/mcp-SERVERNAME/
+         SKILL.md              <- Main skill (always loaded)
+         references/
+           tool-catalog.md     <- Full tool tables (loaded on demand)
+
+     Claude will load references/ files when a user asks about a tool
+     not covered in the summary table. The escape hatch is always:
+       mcporter list SERVERNAME --all-parameters
+-->

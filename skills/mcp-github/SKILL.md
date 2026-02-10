@@ -1,11 +1,11 @@
 ---
 name: mcp-github
-description: Call GitHub MCP tools via mcporter CLI — 40 tools for PRs, issues, repos, code search, releases, and more. Use for cross-repo access, structured data, and operations beyond local `gh` CLI scope. Requires GITHUB_TOKEN env var.
+description: "Call GitHub MCP tools via mcporter CLI \u2014 40 tools for PRs, issues, repos, code search, releases, and more. Use for: 'search code across repos', 'read files from another branch', 'review PR diff', 'cross-repo queries', 'push files to remote'. Requires GITHUB_TOKEN env var."
 allowed-tools: [Bash]
 ---
 
 <objective>
-Call GitHub MCP tools through the mcporter CLI. Provides 40 structured tools for pull requests, issues, repositories, code search, releases, users, and teams. Use this for cross-repo operations, structured data retrieval, and capabilities the local `gh` CLI doesn't offer (semantic code search, file content by ref, batch operations). Requires `GITHUB_TOKEN` env var (set in ~/.zshrc).
+Call GitHub MCP tools through the mcporter CLI. 40 structured tools for pull requests, issues, repositories, code search, releases, users, and teams. Use this for cross-repo operations, structured data retrieval, and capabilities the local `gh` CLI doesn't offer (semantic code search, file content by ref, batch operations). Requires `GITHUB_TOKEN` env var (set in ~/.zshrc).
 </objective>
 
 <process>
@@ -36,82 +36,19 @@ mcporter call 'github.TOOL_NAME(key: "value", key2: "value2")' --output json
 
 Always use `--output json` for machine-readable results.
 
-## Tool Catalog
+## Tool Catalog Summary (40 tools)
 
-### Pull Request Management (10 tools)
+| Category | Count | Key Tools |
+|----------|-------|-----------|
+| Pull Requests | 10 | `pull_request_read`, `create_pull_request`, `merge_pull_request`, `list_pull_requests`, `pull_request_review_write` |
+| Repo Exploration | 8 | `get_file_contents`, `search_code`, `list_commits`, `get_commit`, `search_repositories` |
+| Issues | 8 | `issue_read`, `issue_write`, `add_issue_comment`, `list_issues`, `search_issues` |
+| Repo Management | 6 | `create_branch`, `push_files`, `create_or_update_file`, `create_repository` |
+| Releases | 3 | `list_releases`, `get_latest_release`, `get_release_by_tag` |
+| Users & Teams | 4 | `get_me`, `search_users`, `get_teams`, `get_team_members` |
+| AI | 1 | `assign_copilot_to_issue` |
 
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `pull_request_read` | `owner`, `repo`, `pullNumber`, `method` | Read PR details — method: `get` / `get_diff` / `get_comments` / `get_reviews` / `get_status` / `list_files` / `get_review_comments` |
-| `create_pull_request` | `owner`, `repo`, `title`, `head`, `base`, `body`, `draft` | Create a new PR |
-| `update_pull_request` | `owner`, `repo`, `pullNumber`, `title`, `body`, `state`, `base` | Update PR title/body/state/base |
-| `merge_pull_request` | `owner`, `repo`, `pullNumber`, `commit_title`, `merge_method` | Merge PR (merge/squash/rebase) |
-| `list_pull_requests` | `owner`, `repo`, `state`, `head`, `base`, `sort`, `direction`, `page`, `perPage` | List PRs with filters |
-| `search_pull_requests` | `query`, `page`, `perPage` | Search PRs across GitHub with query syntax |
-| `pull_request_review_write` | `owner`, `repo`, `pullNumber`, `method` | Write reviews — method: `create` / `submit` / `dismiss` |
-| `add_comment_to_pending_review` | `owner`, `repo`, `pullNumber`, `body`, `path`, `line` | Add inline comment to pending review |
-| `request_copilot_review` | `owner`, `repo`, `pullNumber` | Request Copilot to review a PR |
-| `update_pull_request_branch` | `owner`, `repo`, `pullNumber`, `expected_head_sha` | Update PR branch (merge base into head) |
-
-### Repository Exploration (8 tools)
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `get_file_contents` | `owner`, `repo`, `path`, `ref` | Read file/directory contents at any ref |
-| `list_commits` | `owner`, `repo`, `sha`, `path`, `author`, `since`, `until`, `page`, `perPage` | List commits with filters |
-| `get_commit` | `owner`, `repo`, `sha` | Get single commit details + diff |
-| `list_branches` | `owner`, `repo`, `page`, `perPage` | List all branches |
-| `list_tags` | `owner`, `repo`, `page`, `perPage` | List all tags |
-| `get_tag` | `owner`, `repo`, `tag` | Get tag details |
-| `search_code` | `query`, `page`, `perPage` | Search code across GitHub |
-| `search_repositories` | `query`, `page`, `perPage` | Search repositories |
-
-### Issue Management (8 tools)
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `issue_read` | `owner`, `repo`, `issue_number`, `method` | Read issue — method: `get` / `get_comments` / `get_sub_issues` / `get_labels` |
-| `issue_write` | `owner`, `repo`, `method`, `title`, `body`, `assignees`, `labels`, `state` | Create/update issues — method: `create` / `update` |
-| `add_issue_comment` | `owner`, `repo`, `issue_number`, `body` | Add a comment to an issue |
-| `list_issues` | `owner`, `repo`, `state`, `labels`, `sort`, `direction`, `since`, `page`, `perPage` | List issues with filters |
-| `search_issues` | `query`, `page`, `perPage` | Search issues across GitHub |
-| `list_issue_types` | `owner`, `repo` | List available issue types for a repo |
-| `sub_issue_write` | `owner`, `repo`, `issue_number`, `method` | Manage sub-issues — method: `add` / `remove` / `reprioritize` |
-| `get_label` | `owner`, `repo`, `name` | Get label details |
-
-### Repository Management (6 tools)
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `create_branch` | `owner`, `repo`, `ref`, `sha` | Create a branch from a SHA |
-| `create_or_update_file` | `owner`, `repo`, `path`, `content`, `message`, `branch`, `sha` | Create or update a single file |
-| `delete_file` | `owner`, `repo`, `path`, `message`, `branch`, `sha` | Delete a file |
-| `push_files` | `owner`, `repo`, `branch`, `files`, `message` | Push multiple files in one commit |
-| `create_repository` | `name`, `description`, `private`, `autoInit` | Create a new repository |
-| `fork_repository` | `owner`, `repo`, `organization` | Fork a repository |
-
-### Releases (3 tools)
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `list_releases` | `owner`, `repo`, `page`, `perPage` | List all releases |
-| `get_latest_release` | `owner`, `repo` | Get the latest release |
-| `get_release_by_tag` | `owner`, `repo`, `tag` | Get release by tag name |
-
-### Users & Teams (4 tools)
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `get_me` | — | Get authenticated user info |
-| `search_users` | `query`, `page`, `perPage` | Search GitHub users |
-| `get_teams` | `org` | List teams in an organization |
-| `get_team_members` | `org`, `team_slug` | List members of a team |
-
-### AI (1 tool)
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `assign_copilot_to_issue` | `owner`, `repo`, `issue_number` | Assign Copilot to work on an issue |
+**Full parameter details**: Read `references/tool-catalog.md` or run `mcporter list github --all-parameters`
 
 ## Workflows
 
@@ -211,5 +148,5 @@ mcporter call 'github.add_issue_comment(owner: "org", repo: "repo", issue_number
 - **Multi-file commits**: Use `push_files` with a `files` array to commit multiple files atomically — avoids multiple `create_or_update_file` calls.
 - **`list_pull_requests` sort options**: `created`, `updated`, `popularity`, `long-running`. The `long-running` sort is useful for finding stale PRs.
 - If `GITHUB_TOKEN` is not set, mcporter will fail with an auth error. Check with `echo $GITHUB_TOKEN`.
-- Discover tools: `mcporter list github --all-parameters`
+- Discover all tools and parameters: `mcporter list github --all-parameters`
 </tips>

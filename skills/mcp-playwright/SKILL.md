@@ -1,6 +1,6 @@
 ---
 name: mcp-playwright
-description: Browser automation via Playwright MCP — navigate, interact, screenshot, and inspect web pages headlessly. Use when you need to browse the web, fill forms, take screenshots, or scrape page content without an existing browser session.
+description: "Browser automation via Playwright MCP \u2014 navigate, interact, screenshot, and inspect web pages headlessly. Use for: 'scrape this page', 'fill out a web form', 'take a screenshot of a URL', 'check if a site is up'. Use when no browser session exists."
 allowed-tools: [Bash]
 ---
 
@@ -114,15 +114,10 @@ mcporter call playwright.browser_console_messages --output json
 mcporter call playwright.browser_network_requests --output json
 ```
 
-## Discovering All Available Tools
-
-```bash
-mcporter list playwright --all-parameters
-```
-
 </process>
 
 <tips>
+- Discover all tools and parameters: `mcporter list playwright --all-parameters`
 - **Headless by default**: The server runs `--headless` since Claude operates in a terminal. No display server needed.
 - **First call is slower**: npx downloads `@playwright/mcp` on the first invocation. Subsequent calls reuse the cached package.
 - **Use `browser_snapshot` as your primary observation tool** — it returns an accessibility tree with element refs that you use for `browser_click`, `browser_type`, etc.
